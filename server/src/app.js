@@ -11,7 +11,6 @@ app.use(cors({
     credentials: true
 }));
 const port = process.env.PORT || 5000;
-
 connectToDB()
     .then(() => {
         console.log("Connected to DB successfully");
@@ -21,4 +20,5 @@ connectToDB()
     })
     .catch((err) => {
         console.error("Cannot establish connection");
-    })
+    });
+
