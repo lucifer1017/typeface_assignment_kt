@@ -1,17 +1,17 @@
-const File = require('../models/file.model');
+const File = require('../models/fileModel');
 const path = require('path');
 const fs = require('fs').promises;
 require('dotenv').config();
 
 const uploadPath = path.join(__dirname, '..', process.env.UPLOAD_PATH);
 const supportedFileTypes = process.env.SUPPORTED_FILE_TYPES.split(',');
-
+console.log(supportedFileTypes);
 const uploadFile = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'Please upload a file.' });
         }
-
+        // console.log("req.file object:", req.file);
         const fileExtension = path.extname(req.file.originalname).toLowerCase().substring(1);
         if (!supportedFileTypes.includes(fileExtension)) {
             await fs.unlink(req.file.path);
@@ -20,7 +20,7 @@ const uploadFile = async (req, res) => {
 
         const newFile = new File({
             filename: req.file.filename,
-            originalName: req.file.originalname,
+            originalname: req.file.originalname,
             mimeType: req.file.mimetype,
             size: req.file.size,
         });
