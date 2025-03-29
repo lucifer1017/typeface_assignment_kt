@@ -5,13 +5,13 @@ require('dotenv').config();
 
 const uploadPath = path.join(__dirname, '..', process.env.UPLOAD_PATH);
 const supportedFileTypes = process.env.SUPPORTED_FILE_TYPES.split(',');
-console.log(supportedFileTypes);
+const maxFileSize = 10 * 1024 * 1024;
 const uploadFile = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'Please upload a file.' });
         }
-        // console.log("req.file object:", req.file);
+
         const fileExtension = path.extname(req.file.originalname).toLowerCase().substring(1);
         if (!supportedFileTypes.includes(fileExtension)) {
             await fs.unlink(req.file.path);
@@ -24,12 +24,14 @@ const uploadFile = async (req, res) => {
             mimeType: req.file.mimetype,
             size: req.file.size,
         });
-
+        if (newFile.size >= maxFileSize) {
+            throw new Error({ message: "File size should be less than 10 MB" });
+        }
         await newFile.save();
         res.status(201).json({ message: 'File uploaded successfully.', file: newFile });
     } catch (error) {
         console.error('Error uploading file:', error.message);
-        res.status(500).json({ message: 'Failed to upload file.' });
+        res.status(400).json({ message: 'Failed to upload file.' });
     }
 };
 
@@ -39,7 +41,7 @@ const getAllFiles = async (req, res) => {
         res.status(200).json(files);
     } catch (error) {
         console.error('Error getting all files:', error.message);
-        res.status(500).json({ message: 'Failed to get the file list.' });
+        res.status(400).json({ message: 'Failed to get the file list.' });
     }
 };
 
@@ -54,7 +56,7 @@ const downloadFile = async (req, res) => {
         res.download(filePath, file.originalName);
     } catch (error) {
         console.error('Error downloading the file:', error.message);
-        res.status(500).json({ message: 'Failed to download file.' });
+        res.status(400).json({ message: 'Failed to download file.' });
     }
 };
 

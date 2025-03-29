@@ -6,7 +6,6 @@ const path = require('path');
 const fs = require('fs');
 
 const uploadPath = path.join(__dirname, '..', process.env.UPLOAD_PATH);
-const supportedFileTypes = process.env.SUPPORTED_FILE_TYPES.split(',');
 const maxFileSize = 10 * 1024 * 1024; // I took the liberty of choosing a max upload limit as 10MB.
 
 if (!fs.existsSync(uploadPath)) {
@@ -23,18 +22,8 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  const fileExtension = path.extname(file.originalname).toLowerCase().substring(1);
-  if (supportedFileTypes.includes(fileExtension)) {
-    cb(null, true);
-  } else {
-    cb(new Error("File type not supported"), false);
-  }
-};
-
 const upload = multer({
   storage: storage,
-  fileFilter: fileFilter,
   limits: { fileSize: maxFileSize },
 });
 
