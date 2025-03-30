@@ -34,7 +34,7 @@ const uploadFile = async (req, res) => {
 
 const getAllFiles = async (req, res) => {
     try {
-        const files = await File.find().sort({ createdAt: -1 });
+        const files = await File.find().sort({ uploadDate: -1 });
         res.json(files);
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch files' });

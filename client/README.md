@@ -7,3 +7,4 @@
 
 # Frontend Tech Stack
 - Reactjs(Vite) + TailwindCSS(for styling)
+- Also added a fun animation to the h1 tag
