@@ -29,6 +29,8 @@ const upload = multer({
 
 fileRouter.post('/upload', upload.single('file'), fileController.uploadFile);
 fileRouter.get('/files', fileController.getAllFiles);
+fileRouter.get('/files/:id', fileController.getFileById);
+fileRouter.get('/view/:id', fileController.viewFile);
 fileRouter.get('/download/:filename', fileController.downloadFile);
 
 module.exports = fileRouter;
