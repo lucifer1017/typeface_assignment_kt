@@ -4,3 +4,4 @@
 
 # Backend Tech Stack
 - Nodejs+Express+MongoDB
+- Added a maxSize limit to the file size of the file being uploaded.
